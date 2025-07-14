@@ -1,0 +1,10 @@
+# VSCode
+.vscode/
+# build outputs
+build/
+dist/
+# runtime
+logs/
+history/
+*.log
+*.swp
