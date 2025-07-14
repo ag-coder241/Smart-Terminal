@@ -8,5 +8,5 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 banner
 [[ $# -gt 0 ]] || { echo "Usage: smart-terminal \"your query\""; exit 64; }
 INPUT="$*"
-CMD="$(bash "$SCRIPT_DIR/to_cmd.sh" "$INPUT")"
-confirm "$CMD"
+CMD="$(bash "$SCRIPT_DIR/llm_translate.sh" "$INPUT")"
+confirm_run "$CMD"

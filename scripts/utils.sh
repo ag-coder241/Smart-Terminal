@@ -8,21 +8,26 @@ banner(){
 
 log(){
     local msg="$1"
-    local ts 
+    local ts logFile
     ts=$(date '+%Y-%m-%d %H:%M:%S')
-    echo "[$ts] $msg" >> "$(dirname "$0")/../logs/$(date '+%Y-%m-%d').log"
+    local ROOT_DIR
+    ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    logfile="$ROOT_DIR/logs/$(date '+%Y-%m-%d').log"
+    
+    mkdir -p "$(dirname "$logfile")"
+    echo "[$ts] $msg" >> "$logfile"
+
 }
 
-confirm(){
+confirm_run(){
     local cmd="$1"
+    echo "DEBUG‑CONFIRM: [$cmd]"
     echo -e "${YELLOW}> $cmd${NC}"
     read -rp "Run this command? [y/n]" ans
     [[ $ans =~ ^[Yy]$ ]] || { echo "exiting"; exit 1; }
     eval "$cmd"
     log "$cmd"
 }
-
-
 
 
 
