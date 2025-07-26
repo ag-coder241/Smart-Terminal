@@ -4,7 +4,7 @@
 BOLD='\033[1m'; RED='\033[31m'; GREEN='\033[32m'; YELLOW='\033[33m'; NC='\033[0m'
 
 banner(){
-    echo -e "${BOLD}${GREEN}Thinking... ${NC}"
+    echo -e "${BOLD}${GREEN}Thinking... ${NC}" >&2
 }
 
 log(){
@@ -26,13 +26,10 @@ confirm_run(){
     local cmd="$2"
     #echo "DEBUG‑CONFIRM: [$cmd]"
     cmd=$(printf '%s' "$cmd" | tr -d '\r\n') #remove hidden newline characters
-    echo -e "${YELLOW} > $cmd ${NC}"
-    read -rp "Run this command? [y/n]" ans
-    [[ $ans =~ ^[Yy]$ ]] || { echo "exiting"; exit 1; }
-    eval "$cmd" #executing the command
+    echo -e "${YELLOW} > $cmd ${NC}" >&2
+    read -rp "Run this command? [y/n]" ans < /dev/tty
+    [[ $ans =~ ^[Yy]$ ]] || { echo "exiting" >&2; exit 1; }
+    echo "$cmd" #executing the command
     log "$query" "$cmd"
 }
-
-
-
 
