@@ -2,33 +2,36 @@
 # shellcheck disable=SC2034,SC2155
 
 BOLD='\033[1m'; RED='\033[31m'; GREEN='\033[32m'; YELLOW='\033[33m'; NC='\033[0m'
+
 banner(){
-    echo -e "${BOLD}${GREEN}Smart Terminal ${NC}"
+    echo -e "${BOLD}${GREEN}Thinking... ${NC}"
 }
 
 log(){
-    local msg="$1"
-    local ts logFile
+    local query="$1"
+    local cmd="$2"
+    local ts 
+    local logfile
     ts=$(date '+%Y-%m-%d %H:%M:%S')
     local ROOT_DIR
     ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    logfile="$ROOT_DIR/logs/$(date '+%Y-%m-%d').log"
+    logfile="$ROOT_DIR/logs/smart_terminal.log"
     
     mkdir -p "$(dirname "$logfile")"
-    echo "[$ts] $msg" >> "$logfile"
-
+    echo "[$ts] $query ::: $cmd" >> "$logfile"
 }
 
 confirm_run(){
-    local cmd="$1"
-    echo "DEBUG‑CONFIRM: [$cmd]"
-    echo -e "${YELLOW}> $cmd${NC}"
+    local query="$1"
+    local cmd="$2"
+    #echo "DEBUG‑CONFIRM: [$cmd]"
+    cmd=$(printf '%s' "$cmd" | tr -d '\r\n') #remove hidden newline characters
+    echo -e "${YELLOW} > $cmd ${NC}"
     read -rp "Run this command? [y/n]" ans
     [[ $ans =~ ^[Yy]$ ]] || { echo "exiting"; exit 1; }
-    eval "$cmd"
-    log "$cmd"
+    eval "$cmd" #executing the command
+    log "$query" "$cmd"
 }
-
 
 
 
